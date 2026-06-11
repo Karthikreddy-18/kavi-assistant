@@ -77,4 +77,4 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => console.log('KAVI on port', PORT));
+app.listen(PORT, () => console.log('KAVI on port', PORT, 'Key set:', !!GROQ_KEY));
