@@ -11,7 +11,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const GROQ_KEY = process.env.GROQ_API_KEY;
+const groq = GROQ_KEY ? new Groq({ apiKey: GROQ_KEY }) : null;
 const NEEDS_SEARCH = /\b(news|today|current|latest|recent|weather|price|stock|score|result|update|forecast|election|who won|what happened|how much|livescore|match|date|time)\b/i;
 
 function shouldSearch(text) {
@@ -43,8 +44,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/api/chat', async (req, res) => {
   try {
-    if (!process.env.GROQ_API_KEY || process.env.GROQ_API_KEY === 'your_groq_api_key_here') {
-      return res.status(500).json({ error: 'GROQ_API_KEY not set in .env file. Add your real key and restart.' });
+    if (!groq) {
+      return res.status(500).json({ error: 'GROQ_API_KEY not set. Add it in Render dashboard env vars and redeploy.' });
     }
 
     const { message, history } = req.body;
