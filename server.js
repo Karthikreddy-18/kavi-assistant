@@ -73,6 +73,10 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+app.get('/debug', (req, res) => {
+  res.json({ apiKey: GROQ_KEY ? 'SET' : 'NOT SET', env: Object.keys(process.env).filter(k => k.includes('KEY') || k.includes('API')).reduce((a, k) => (a[k] = '***', a), {}) });
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
